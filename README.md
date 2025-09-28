@@ -1,16 +1,62 @@
-# clann
+# Clann (MVP)
 
-A new Flutter project.
+Clann is a mobile app built with Flutter to support the resurgence of the Irish language by making learning Irish fun and easy. The MVP focuses on making Irish accessible, practical, and engaging.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## MVP Goals
+- Provide a **core learning path** (grammar + vocabulary).
+- Enable learners to practice by **doing** (quizzes, prompts).
+- Create a safe, fun space to use Irish daily.
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features (MVP Scope)
+- **Learning Section**
+  - Grammar packs (present, past, future tenses, irregular verbs).
+  - Vocab packs (greetings, food, Gaeltacht survival, daily life).
+  - Quizzes + flashcards.
+  - Phrase of the Day.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Dictionary / Reference**
+  - Mini dictionary with search (EN ↔ GA).
+  - Verb conjugator.
+
+---
+
+## Tech Stack
+- **Frontend:** Flutter
+- **State Management:** Riverpod (safe, testable state management for auth, feed, lessons, quizzes, and app settings)
+- **Backend:** Firebase (Firestore, Auth, Storage, Cloud Functions)
+- **Search:** Algolia (for dictionary + content search)
+
+---
+
+
+## Roadmap
+### Phase 1 (MVP)
+- Core grammar + vocab packs.
+- Quizzes, Phrasebook
+- Simple dictionary + conjugator.
+- Streaks, XP, gamification.
+
+### Phase 2
+- Audio support (pronunciation).
+- Junior Cert prep packs.
+
+### Phase 3
+- Gaeltacht integration (radio, live content).
+- Advanced grammar & culture packs.
+- Expanded social/community features.
+
+---
+
+## Vision
+Clann’s long-term goal is to be **the digital home for learning and using Irish** — part classroom, part community, part cultural hub.
+
+---
+
+## 🤝 Contributing 🤝
+This is an early-stage MVP. If you’d like to contribute, share feedback, or explore collaboration, please reach out.
+
+---
