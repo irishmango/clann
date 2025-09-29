@@ -4,12 +4,12 @@ class AppColors {
   AppColors._();
 
   // Brand / Primary
-  static const primary = Color(0xFF64A782); // Updated primary
-  static const primaryLight = Color(0xFFE4F1EA); // Updated primaryLight
+  static const primary = Color(0xFF64A782); 
+  static const primaryLight = Color(0xFFE4F1EA); 
 
   // Secondary / Accent
-  static const secondary = Color(0xFFEBBC54); // Updated secondary
-  static const secondaryLight = Color(0xFFFEF1CC); // Updated secondaryLight
+  static const secondary = Color(0xFFEBBC54); 
+  static const secondaryLight = Color(0xFFFEF1CC);
 
   // Brand extended
   static const navy = Color(0xFF2F314A);
@@ -30,10 +30,10 @@ class AppColors {
   static const grey900 = Color(0xFF111827);
 
   // Semantic
-  static const success = Color(0xFF10B981); // Emerald 500
-  static const warning = Color(0xFFF59E0B); // Amber 500
-  static const error = Color(0xFFA70000); // Updated error
-  static const info = Color(0xFF0EA5E9); // Sky 500
+  static const success = Color(0xFF10B981);
+  static const warning = Color(0xFFF59E0B);
+  static const error = Color(0xFFA70000); 
+  static const info = Color(0xFF0EA5E9); 
 
   // Background / Surfaces (single light theme for now)
   static const background = Color.fromRGBO(244, 245, 240, 1);
@@ -46,10 +46,10 @@ const kFontFamily = 'Inter';
 /// Base text theme using Inter font (single light palette).
 TextTheme _buildBaseTextTheme(ColorScheme scheme) {
   const onBgColor = Colors.black;
-  const secondaryText = AppColors.grey600;
+  // const secondaryText = AppColors.grey600;
   return const TextTheme(
     displayLarge: TextStyle(fontFamily: kFontFamily, fontSize: 57, fontWeight: FontWeight.w600, height: 1.12, letterSpacing: -0.25, color: onBgColor),
-    displayMedium: TextStyle(fontFamily: kFontFamily, fontSize: 45, fontWeight: FontWeight.w600, height: 1.15, letterSpacing: 0, color: onBgColor),
+    displayMedium: TextStyle(fontFamily: kFontFamily, fontSize: 64, fontWeight: FontWeight.w600, height: 1.15, letterSpacing: 0, color: onBgColor),
     displaySmall: TextStyle(fontFamily: kFontFamily, fontSize: 36, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: 0, color: onBgColor),
     headlineLarge: TextStyle(fontFamily: kFontFamily, fontSize: 32, fontWeight: FontWeight.w600, height: 1.25, letterSpacing: 0, color: onBgColor),
     headlineMedium: TextStyle(fontFamily: kFontFamily, fontSize: 28, fontWeight: FontWeight.w600, height: 1.25, letterSpacing: 0, color: onBgColor),
@@ -74,7 +74,6 @@ ThemeData buildAppTheme() {
     primary: AppColors.primary,
     secondary: AppColors.secondary,
     surface: AppColors.surface,
-    background: AppColors.background,
     error: AppColors.error,
   );
 
@@ -132,7 +131,7 @@ ThemeData buildAppTheme() {
 
 extension ThemeContextColors on BuildContext {
   Color get primaryColor => Theme.of(this).colorScheme.primary;
-  Color get secondaryColor => Theme.of(this).colorScheme.secondary;
+  Color get secondaryColor => Theme.of(this).colorScheme.secondary;  
   Color get successColor => AppColors.success;
   Color get warningColor => AppColors.warning;
   Color get errorColor => AppColors.error;

@@ -1,5 +1,4 @@
 import 'package:clann/src/features/root_screen/presentation/screens/root_screen.dart';
-import 'package:clann/src/features/home/presentation/screens/home_screen.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 

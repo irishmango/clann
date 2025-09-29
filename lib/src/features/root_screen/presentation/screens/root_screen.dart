@@ -1,16 +1,14 @@
+import 'package:clann/src/features/dictionary/presentation/screens/conjugator_screen.dart';
 import 'package:clann/src/features/dictionary/presentation/screens/dictionary_screen.dart';
 import 'package:clann/src/features/home/presentation/screens/home_screen.dart';
 import 'package:clann/src/features/learn/presentation/screens/learn_screen.dart';
 import 'package:clann/src/features/notes/presentation/screens/notes_screen.dart';
 import 'package:clann/src/features/profile/presentation/screens/profile_screen.dart';
-import 'package:clann/src/shared/custom_search_bar.dart';
 import 'package:clann/src/features/home/presentation/widgets/nav_bar.dart';
-import 'package:clann/src/shared/LongTile.dart';
-import 'package:clann/src/shared/small_tile.dart';
 import 'package:flutter/material.dart';
 
 class RootScreen extends StatefulWidget {
-  RootScreen({super.key});
+  const RootScreen({super.key});
 
   @override
   State<RootScreen> createState() => _RootScreenState();

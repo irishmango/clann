@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatelessWidget {
+  final String hintText;
   const CustomSearchBar({
     super.key,
+    this.hintText = 'Search',
   });
 
   @override
@@ -15,7 +17,7 @@ class CustomSearchBar extends StatelessWidget {
       ),
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'Search',
+          hintText: hintText,
           border: InputBorder.none,
           prefixIcon: Icon(Icons.search),
         ),

@@ -10,6 +10,6 @@ class GrammarOverviewScreen extends StatelessWidget {
           'Profile Screen',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-    );;
+    );
   }
 }

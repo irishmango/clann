@@ -1,7 +1,7 @@
 import 'package:clann/src/shared/custom_search_bar.dart';
-import 'package:clann/src/features/home/presentation/widgets/nav_bar.dart';
-import 'package:clann/src/shared/LongTile.dart';
+import 'package:clann/src/shared/long_tile.dart';
 import 'package:clann/src/shared/small_tile.dart';
+import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -20,9 +20,10 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 60,
+                      backgroundImage: AssetImage('assets/img/avatar_temp.jpg'),
                     ),
                     SizedBox(width: 10),
-                    Text('User Name', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, fontFamily: 'Inter')),
+                    Text('Hi, Jonathan!', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, fontFamily: 'Inter', color: AppColors.primary)),
                   ],
                 ),
               ),
