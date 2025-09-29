@@ -1,7 +1,6 @@
 import 'package:clann/src/features/dictionary/presentation/widgets/conjugator.dart';
 import 'package:clann/src/features/dictionary/presentation/widgets/conjugator_chip.dart';
 import 'package:clann/src/shared/custom_search_bar.dart';
-import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 
 class ConjugatorScreen extends StatelessWidget {
@@ -12,11 +11,19 @@ class ConjugatorScreen extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 80.0, left: 18.0, right: 18.0, bottom: 32.0),
+          padding: const EdgeInsets.only(
+            top: 80.0,
+            left: 18.0,
+            right: 18.0,
+            bottom: 32.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Conjugator", style: Theme.of(context).textTheme.displayMedium),
+              Text(
+                "Conjugator",
+                style: Theme.of(context).textTheme.displayMedium,
+              ),
               const SizedBox(height: 18),
               CustomSearchBar(hintText: "Search in Irish or English"),
             ],
@@ -47,7 +54,7 @@ class ConjugatorScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
           child: Conjugator(),
-        )
+        ),
       ],
     );
   }

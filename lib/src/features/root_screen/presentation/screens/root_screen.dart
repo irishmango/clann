@@ -1,4 +1,3 @@
-import 'package:clann/src/features/dictionary/presentation/screens/conjugator_screen.dart';
 import 'package:clann/src/features/dictionary/presentation/screens/dictionary_screen.dart';
 import 'package:clann/src/features/home/presentation/screens/home_screen.dart';
 import 'package:clann/src/features/learn/presentation/screens/learn_screen.dart';
@@ -15,8 +14,8 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
-  int _selectedIndex = 2; 
- // Default to Home Screen
+  int _selectedIndex = 2;
+  // Default to Home Screen
   void _onRouteTapped(int index) {
     if (index == _selectedIndex) return;
     // Handle navigation logic here
@@ -28,8 +27,7 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: 
-      switch (_selectedIndex) {
+      body: switch (_selectedIndex) {
         0 => LearnScreen(),
         1 => DictionaryScreen(),
         2 => HomeScreen(),
@@ -37,7 +35,10 @@ class _RootScreenState extends State<RootScreen> {
         4 => ProfileScreen(),
         _ => HomeScreen(),
       },
-      bottomNavigationBar: NavBar(onRouteTapped: _onRouteTapped, selectedIndex: _selectedIndex),
+      bottomNavigationBar: NavBar(
+        onRouteTapped: _onRouteTapped,
+        selectedIndex: _selectedIndex,
+      ),
     );
   }
 }

@@ -4,11 +4,11 @@ class AppColors {
   AppColors._();
 
   // Brand / Primary
-  static const primary = Color(0xFF64A782); 
-  static const primaryLight = Color(0xFFE4F1EA); 
+  static const primary = Color(0xFF64A782);
+  static const primaryLight = Color(0xFFE4F1EA);
 
   // Secondary / Accent
-  static const secondary = Color(0xFFEBBC54); 
+  static const secondary = Color(0xFFEBBC54);
   static const secondaryLight = Color(0xFFFEF1CC);
 
   // Brand extended
@@ -32,8 +32,8 @@ class AppColors {
   // Semantic
   static const success = Color(0xFF10B981);
   static const warning = Color(0xFFF59E0B);
-  static const error = Color(0xFFA70000); 
-  static const info = Color(0xFF0EA5E9); 
+  static const error = Color(0xFFA70000);
+  static const info = Color(0xFF0EA5E9);
 
   // Background / Surfaces (single light theme for now)
   static const background = Color.fromRGBO(244, 245, 240, 1);
@@ -48,21 +48,126 @@ TextTheme _buildBaseTextTheme(ColorScheme scheme) {
   const onBgColor = Colors.black;
   // const secondaryText = AppColors.grey600;
   return const TextTheme(
-    displayLarge: TextStyle(fontFamily: kFontFamily, fontSize: 57, fontWeight: FontWeight.w600, height: 1.12, letterSpacing: -0.25, color: onBgColor),
-    displayMedium: TextStyle(fontFamily: kFontFamily, fontSize: 64, fontWeight: FontWeight.w600, height: 1.15, letterSpacing: 0, color: onBgColor),
-    displaySmall: TextStyle(fontFamily: kFontFamily, fontSize: 36, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: 0, color: onBgColor),
-    headlineLarge: TextStyle(fontFamily: kFontFamily, fontSize: 32, fontWeight: FontWeight.w600, height: 1.25, letterSpacing: 0, color: onBgColor),
-    headlineMedium: TextStyle(fontFamily: kFontFamily, fontSize: 28, fontWeight: FontWeight.w600, height: 1.25, letterSpacing: 0, color: onBgColor),
-    headlineSmall: TextStyle(fontFamily: kFontFamily, fontSize: 24, fontWeight: FontWeight.w600, height: 1.3, letterSpacing: 0, color: onBgColor),
-    titleLarge: TextStyle(fontFamily: kFontFamily, fontSize: 20, fontWeight: FontWeight.w600, height: 1.3, letterSpacing: 0, color: onBgColor),
-    titleMedium: TextStyle(fontFamily: kFontFamily, fontSize: 16, fontWeight: FontWeight.w600, height: 1.35, letterSpacing: 0.15, color: onBgColor),
-    titleSmall: TextStyle(fontFamily: kFontFamily, fontSize: 14, fontWeight: FontWeight.w600, height: 1.3, letterSpacing: 0.1, color: onBgColor),
-    bodyLarge: TextStyle(fontFamily: kFontFamily, fontSize: 16, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: 0.15, color: onBgColor),
-    bodyMedium: TextStyle(fontFamily: kFontFamily, fontSize: 14, fontWeight: FontWeight.w400, height: 1.45, letterSpacing: 0.25, color: onBgColor),
-    bodySmall: TextStyle(fontFamily: kFontFamily, fontSize: 12, fontWeight: FontWeight.w400, height: 1.4, letterSpacing: 0.4, color: onBgColor),
-    labelLarge: TextStyle(fontFamily: kFontFamily, fontSize: 14, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: 0.1, color: onBgColor),
-    labelMedium: TextStyle(fontFamily: kFontFamily, fontSize: 12, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: 0.5, color: onBgColor),
-    labelSmall: TextStyle(fontFamily: kFontFamily, fontSize: 11, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: 0.5, color: onBgColor),
+    displayLarge: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 70,
+      fontWeight: FontWeight.w900,
+      height: 1.12,
+      letterSpacing: -0.25,
+      color: onBgColor,
+    ),
+    displayMedium: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 64,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      letterSpacing: 0,
+      color: onBgColor,
+    ),
+    displaySmall: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 36,
+      fontWeight: FontWeight.w600,
+      height: 1.2,
+      letterSpacing: 0,
+      color: onBgColor,
+    ),
+    headlineLarge: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 32,
+      fontWeight: FontWeight.w600,
+      height: 1.25,
+      letterSpacing: 0,
+      color: onBgColor,
+    ),
+    headlineMedium: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 28,
+      fontWeight: FontWeight.w600,
+      height: 1.25,
+      letterSpacing: 0,
+      color: onBgColor,
+    ),
+    headlineSmall: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      height: 1.3,
+      letterSpacing: 0,
+      color: onBgColor,
+    ),
+    titleLarge: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      height: 1.3,
+      letterSpacing: 0,
+      color: onBgColor,
+    ),
+    titleMedium: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      height: 1.35,
+      letterSpacing: 0.15,
+      color: onBgColor,
+    ),
+    titleSmall: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      height: 1.3,
+      letterSpacing: 0.1,
+      color: onBgColor,
+    ),
+    bodyLarge: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      height: 1.5,
+      letterSpacing: 0.15,
+      color: onBgColor,
+    ),
+    bodyMedium: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      height: 1.45,
+      letterSpacing: 0.25,
+      color: onBgColor,
+    ),
+    bodySmall: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      height: 1.4,
+      letterSpacing: 0.4,
+      color: onBgColor,
+    ),
+    labelLarge: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      height: 1.2,
+      letterSpacing: 0.1,
+      color: onBgColor,
+    ),
+    labelMedium: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      height: 1.2,
+      letterSpacing: 0.5,
+      color: onBgColor,
+    ),
+    labelSmall: TextStyle(
+      fontFamily: kFontFamily,
+      fontSize: 11,
+      fontWeight: FontWeight.w600,
+      height: 1.2,
+      letterSpacing: 0.5,
+      color: onBgColor,
+    ),
   );
 }
 
@@ -91,7 +196,9 @@ ThemeData buildAppTheme() {
       titleTextStyle: _buildBaseTextTheme(colorScheme).titleLarge,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      hintStyle: _buildBaseTextTheme(colorScheme).bodyLarge?.copyWith(color: Colors.black),
+      hintStyle: _buildBaseTextTheme(
+        colorScheme,
+      ).bodyLarge?.copyWith(color: Colors.black),
       prefixIconColor: Colors.black,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -108,14 +215,21 @@ ThemeData buildAppTheme() {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        textStyle: const TextStyle(fontFamily: kFontFamily, fontWeight: FontWeight.w600, fontSize: 16),
+        textStyle: const TextStyle(
+          fontFamily: kFontFamily,
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.primaryLight,
       selectedColor: AppColors.primary,
-      labelStyle: const TextStyle(fontFamily: kFontFamily, fontWeight: FontWeight.w500),
+      labelStyle: const TextStyle(
+        fontFamily: kFontFamily,
+        fontWeight: FontWeight.w500,
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       side: const BorderSide(color: AppColors.primaryLight),
@@ -131,7 +245,7 @@ ThemeData buildAppTheme() {
 
 extension ThemeContextColors on BuildContext {
   Color get primaryColor => Theme.of(this).colorScheme.primary;
-  Color get secondaryColor => Theme.of(this).colorScheme.secondary;  
+  Color get secondaryColor => Theme.of(this).colorScheme.secondary;
   Color get successColor => AppColors.success;
   Color get warningColor => AppColors.warning;
   Color get errorColor => AppColors.error;
