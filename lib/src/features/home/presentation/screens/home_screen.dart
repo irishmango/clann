@@ -1,10 +1,24 @@
+import 'package:clann/src/features/bundles/presentation/screens/bundles_overview_screen.dart';
+import 'package:clann/src/features/grammar/presentation/screens/grammar_overview_screen.dart';
+import 'package:clann/src/features/vocab/presentation/screens/vocab_overview_screen.dart';
 import 'package:clann/src/shared/custom_search_bar.dart';
 import 'package:clann/src/shared/long_tile.dart';
 import 'package:clann/src/shared/small_tile.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final grammarList = [
+    "Verbs",
+    "Nouns",
+    "Adjectives",
+    "Adverbs",
+    "Pronouns",
+    "Prepositions",
+  ];
+
+  final vocabList = ["Weather", "Food", "Travel", "Sports", "Music", "Art"];
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +70,22 @@ class HomeScreen extends StatelessWidget {
                           fontFamily: 'Inter',
                         ),
                       ),
-                      Text(
-                        "See All",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GrammarOverviewScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "See All",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter',
+                          ),
                         ),
                       ),
                     ],
@@ -69,25 +93,14 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 100,
-                  child: ListView(
+                  child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.zero,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: SmallTile(title: "Verbs"),
-                      ),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Nouns"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Adjectives"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Adverbs"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Pronouns"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Prepositions"),
-                    ],
+                    padding: EdgeInsets.only(left: 16),
+                    itemCount: grammarList.length,
+                    itemBuilder: (context, index) {
+                      return SmallTile(title: grammarList[index]);
+                    },
+                    separatorBuilder: (context, index) => SizedBox(width: 12),
                   ),
                 ),
               ],
@@ -109,12 +122,22 @@ class HomeScreen extends StatelessWidget {
                           fontFamily: 'Inter',
                         ),
                       ),
-                      Text(
-                        "See All",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VocabOverviewScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "See All",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter',
+                          ),
                         ),
                       ),
                     ],
@@ -122,25 +145,14 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 100,
-                  child: ListView(
+                  child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.zero,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: SmallTile(title: "Weather"),
-                      ),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Food"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Travel"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Sports"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Music"),
-                      const SizedBox(width: 12),
-                      SmallTile(title: "Art"),
-                    ],
+                    padding: EdgeInsets.only(left: 16),
+                    itemCount: vocabList.length,
+                    itemBuilder: (context, index) {
+                      return SmallTile(title: vocabList[index]);
+                    },
+                    separatorBuilder: (context, index) => SizedBox(width: 12),
                   ),
                 ),
               ],
@@ -162,12 +174,22 @@ class HomeScreen extends StatelessWidget {
                           fontFamily: 'Inter',
                         ),
                       ),
-                      Text(
-                        "See All",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BundlesOverviewScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "See All",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter',
+                          ),
                         ),
                       ),
                     ],
