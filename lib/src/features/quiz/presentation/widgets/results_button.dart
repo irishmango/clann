@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
-class FinishButton extends StatelessWidget {
+class ResultsButton extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const FinishButton({super.key, this.label = "Finish", this.onTap});
+  const ResultsButton({super.key, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ?? () => Navigator.pop(context),
+      onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 42, vertical: 6),
+        height: 48,
+        width: 100,
+        constraints: const BoxConstraints(minWidth: 120),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(6),
@@ -22,7 +26,7 @@ class FinishButton extends StatelessWidget {
             bottom: BorderSide(color: Colors.black, width: 2),
           ),
         ),
-        child: Text(label, style: Theme.of(context).textTheme.headlineSmall),
+        child: Text(label, style: Theme.of(context).textTheme.titleMedium),
       ),
     );
   }

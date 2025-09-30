@@ -3,7 +3,7 @@ import 'package:clann/src/features/home/presentation/screens/home_screen.dart';
 import 'package:clann/src/features/learn/presentation/screens/learn_screen.dart';
 import 'package:clann/src/features/notes/presentation/screens/notes_screen.dart';
 import 'package:clann/src/features/profile/presentation/screens/profile_screen.dart';
-import 'package:clann/src/features/home/presentation/widgets/nav_bar.dart';
+import 'package:clann/src/features/root_screen/presentation/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class RootScreen extends StatefulWidget {
