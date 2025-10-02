@@ -14,24 +14,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  Achievement? _selectedAchievement;
-  late final AnimationController _overlayController;
-
-  @override
-  void initState() {
-    super.initState();
-    _overlayController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 260),
-      reverseDuration: const Duration(milliseconds: 160),
-    );
-  }
-
-  @override
-  void dispose() {
-    _overlayController.dispose();
-    super.dispose();
-  }
 
   // Default to Profile Screen
   void _onProfileSectionTapped(int index) {
@@ -43,14 +25,34 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   void _openAchievement(Achievement a) {
-    setState(() => _selectedAchievement = a);
-    _overlayController.forward(from: 0);
+    showGeneralDialog(
+      context: context,
+      barrierLabel: 'Achievement',
+      barrierDismissible: true,
+      barrierColor: Colors.black26,
+      useRootNavigator: true,
+      pageBuilder: (_, __, ___) {
+        return PopScope(
+          child: Center(
+            child: _AchievementOverlayCard(
+              achievement: a,
+              onClose: () => Navigator.of(context, rootNavigator: true).pop(),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        final scale = Curves.easeOutBack.transform(anim.value.clamp(0.0, 1.0));
+        return Opacity(
+          opacity: anim.value,
+          child: Transform.scale(scale: scale, child: child),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 260),
+    );
   }
 
-  Future<void> _closeAchievement() async {
-    await _overlayController.reverse();
-    if (mounted) setState(() => _selectedAchievement = null);
-  }
+  // Removed _closeAchievement()
 
   @override
   Widget build(BuildContext context) {
@@ -235,42 +237,6 @@ class _ProfileScreenState extends State<ProfileScreen>
             ],
           ),
         ),
-        if (_selectedAchievement != null) ...[
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: _closeAchievement,
-              child: AnimatedBuilder(
-                animation: _overlayController,
-                builder: (context, _) => Container(
-                  color: Colors.black.withOpacity(
-                    0.25 * _overlayController.value,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Center(
-            child: AnimatedBuilder(
-              animation: _overlayController,
-              builder: (context, _) {
-                final scale = Curves.easeOutBack.transform(
-                  _overlayController.value.clamp(0, 1),
-                );
-                final opacity = _overlayController.value;
-                return Opacity(
-                  opacity: opacity,
-                  child: Transform.scale(
-                    scale: scale,
-                    child: _AchievementOverlayCard(
-                      achievement: _selectedAchievement!,
-                      onClose: _closeAchievement,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
       ],
     );
   }
@@ -300,22 +266,6 @@ class _AchievementOverlayCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: InkWell(
-                onTap: onClose,
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black, width: 1.2),
-                    color: AppColors.grey100,
-                  ),
-                  child: const Icon(Icons.close, size: 16, color: Colors.black),
-                ),
-              ),
-            ),
             Container(
               width: 110,
               height: 110,
