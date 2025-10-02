@@ -3,6 +3,13 @@ import 'package:clann/src/features/quiz/presentation/widgets/quiz_check_button.d
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 
+// Internal drag payload allowing differentiation between new word and reorder.
+class _DragPayload {
+  final String word;
+  final int? fromIndex; // null when coming from bank
+  const _DragPayload(this.word, this.fromIndex);
+}
+
 class DragAndDropQuestionWidget extends StatefulWidget {
   final DragAndDropQuestion question;
   final bool isLast;
@@ -68,8 +75,7 @@ class _DragAndDropQuestionWidgetState extends State<DragAndDropQuestionWidget> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
-        Divider(color: Colors.black.withOpacity(0.25)),
-        const SizedBox(height: 12),
+
         _AnswerArea(
           chosen: _chosen,
           correctOrder: q.correctOrder,
@@ -78,10 +84,21 @@ class _DragAndDropQuestionWidgetState extends State<DragAndDropQuestionWidget> {
             if (_checked) return;
             setState(() => _chosen.removeAt(i));
           },
-          onAcceptWord: (w) {
+          onInsertAt: (index, word) {
             if (_checked) return;
-            if (_chosen.length < q.correctOrder.length)
-              setState(() => _chosen.add(w));
+            setState(() => _chosen.insert(index, word));
+          },
+          onReorder: (from, to) {
+            if (_checked) return;
+            if (from == to || from < 0 || from >= _chosen.length) return;
+            setState(() {
+              final w = _chosen.removeAt(from);
+              var insertIndex = to;
+              if (from < to) insertIndex -= 1;
+              if (insertIndex < 0) insertIndex = 0;
+              if (insertIndex > _chosen.length) insertIndex = _chosen.length;
+              _chosen.insert(insertIndex, w);
+            });
           },
         ),
         const SizedBox(height: 20),
@@ -110,8 +127,8 @@ class _WordBank extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         for (final w in words)
-          Draggable<String>(
-            data: w,
+          Draggable<_DragPayload>(
+            data: _DragPayload(w, null),
             feedback: _Chip(word: w),
             childWhenDragging: Opacity(opacity: 0.3, child: _Chip(word: w)),
             maxSimultaneousDrags: disabled ? 0 : 1,
@@ -128,49 +145,136 @@ class _AnswerArea extends StatelessWidget {
     required this.correctOrder,
     required this.isChecked,
     required this.onRemove,
-    required this.onAcceptWord,
+    required this.onInsertAt,
+    required this.onReorder,
   });
   final List<String> chosen;
   final List<String> correctOrder;
   final bool isChecked;
   final void Function(int) onRemove;
-  final void Function(String) onAcceptWord;
+  final void Function(int index, String word) onInsertAt;
+  final void Function(int from, int to) onReorder;
+
   @override
   Widget build(BuildContext context) {
-    final complete = chosen.length == correctOrder.length;
-    return DragTarget<String>(
-      onWillAccept: (_) => !isChecked && !complete,
-      onAccept: onAcceptWord,
-      builder: (_, __, ___) => Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.black26),
-        ),
-        child: Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          alignment: WrapAlignment.center,
-          children: [
-            if (chosen.isEmpty)
-              Text(
-                'Drag words here',
-                style: Theme.of(context).textTheme.bodyMedium,
-              )
-            else
-              for (int i = 0; i < chosen.length; i++)
-                _AnswerChip(
-                  text: chosen[i],
-                  borderColor: isChecked
-                      ? (chosen[i] == correctOrder[i]
-                            ? AppColors.primary
-                            : AppColors.error)
-                      : Colors.black,
-                  onRemove: () => onRemove(i),
-                  enabled: !isChecked,
-                ),
-          ],
+    final maxLen = correctOrder.length;
+    final canAddMore = chosen.length < maxLen;
+
+    List<Widget> children = [];
+
+    Widget buildInsertionTarget(int insertIndex) {
+      return DragTarget<_DragPayload>(
+        onWillAcceptWithDetails: (details) {
+          final data = details.data;
+          if (isChecked) return false;
+          if (data == null) return false;
+          if (data.fromIndex == null) {
+            return canAddMore; // new word from bank
+          }
+          return true; // always allow reorder
+        },
+        onAcceptWithDetails: (details) {
+          final data = details.data;
+          if (data.fromIndex == null) {
+            if (chosen.contains(data.word)) return; // safety
+            if (chosen.length >= maxLen) return;
+            onInsertAt(insertIndex, data.word);
+          } else {
+            onReorder(data.fromIndex!, insertIndex);
+          }
+        },
+        builder: (context, cand, rej) {
+          final active = cand.isNotEmpty;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 120),
+            width: 10,
+            height: 32,
+            margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+            decoration: BoxDecoration(
+              color: active
+                  ? AppColors.primary.withOpacity(0.5)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          );
+        },
+      );
+    }
+
+    if (chosen.isEmpty) {
+      children.add(buildInsertionTarget(0));
+      children.add(
+        Text('Drag words here', style: Theme.of(context).textTheme.bodyMedium),
+      );
+    } else {
+      for (int i = 0; i < chosen.length; i++) {
+        children.add(buildInsertionTarget(i));
+        final word = chosen[i];
+        children.add(
+          Draggable<_DragPayload>(
+            data: _DragPayload(word, i),
+            feedback: _Chip(word: word),
+            childWhenDragging: Opacity(
+              opacity: 0.3,
+              child: _AnswerChip(
+                text: word,
+                borderColor: isChecked
+                    ? (word == correctOrder[i]
+                          ? AppColors.primary
+                          : AppColors.error)
+                    : Colors.black,
+                onRemove: () => onRemove(i),
+                enabled: !isChecked,
+              ),
+            ),
+            child: _AnswerChip(
+              text: word,
+              borderColor: isChecked
+                  ? (word == correctOrder[i]
+                        ? AppColors.primary
+                        : AppColors.error)
+                  : Colors.black,
+              onRemove: () => onRemove(i),
+              enabled: !isChecked,
+            ),
+          ),
+        );
+      }
+      children.add(buildInsertionTarget(chosen.length));
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(0),
+      child: DragTarget<_DragPayload>(
+        onWillAcceptWithDetails: (details) {
+          final data = details.data;
+          return !isChecked && data != null;
+        },
+        onAcceptWithDetails: (details) {
+          final data = details.data;
+          if (isChecked) return;
+          final endIndex = chosen.length;
+          if (data.fromIndex == null) {
+            if (chosen.length >= maxLen) return;
+            onInsertAt(endIndex, data.word);
+          } else {
+            onReorder(data.fromIndex!, endIndex);
+          }
+        },
+        builder: (context, cand, rej) => Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white.withAlpha(153),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.black26),
+          ),
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 10,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.center,
+            children: children,
+          ),
         ),
       ),
     );

@@ -124,6 +124,7 @@ class _ConjugatorScreenState extends State<ConjugatorScreen> {
           height: 50,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(left: 18),
             separatorBuilder: (_, __) => const SizedBox(width: 8),
             itemCount: tenses.length,
             itemBuilder: (context, index) {

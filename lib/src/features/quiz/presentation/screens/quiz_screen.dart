@@ -2,6 +2,7 @@ import 'package:clann/src/features/quiz/domain/quiz_question.dart';
 import 'package:clann/src/features/quiz/presentation/screens/results_screen.dart';
 import 'package:clann/src/features/quiz/presentation/widgets/multiple_choice_question_widget.dart';
 import 'package:clann/src/features/quiz/presentation/widgets/drag_and_drop_question_widget.dart';
+import 'package:clann/src/features/quiz/presentation/widgets/pair_match_question_widget.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,11 @@ class _QuizScreenState extends State<QuizScreen> {
       prompt: 'What does "Dia dhuit" mean?',
       answers: ['Hello', 'Goodbye', 'Please', 'Thank you'],
       correctIndex: 0,
+    ),
+    PairMatchQuestion(
+      prompt: 'Match the Irish words to their English meanings',
+      ga: ['madra', 'cat', 'uisce', 'arán', 'bainne'],
+      en: ['dog', 'cat', 'water', 'bread', 'milk'],
     ),
     const DragAndDropQuestion(
       prompt: 'Construct: "Chonaic mé an car"',
@@ -95,6 +101,13 @@ class _QuizScreenState extends State<QuizScreen> {
                       QuizQuestionType.dragAndDrop => DragAndDropQuestionWidget(
                         key: ValueKey('dd_$_currentIndex'),
                         question: question as DragAndDropQuestion,
+                        isLast: _isLast,
+                        onNext: _goNext,
+                        onFinish: _finishQuiz,
+                      ),
+                      QuizQuestionType.pairMatch => PairMatchQuestionWidget(
+                        key: ValueKey('pm_$_currentIndex'),
+                        question: question as PairMatchQuestion,
                         isLast: _isLast,
                         onNext: _goNext,
                         onFinish: _finishQuiz,
