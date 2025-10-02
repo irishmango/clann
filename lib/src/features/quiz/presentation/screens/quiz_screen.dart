@@ -1,6 +1,7 @@
+import 'package:clann/src/features/quiz/domain/quiz_question.dart';
 import 'package:clann/src/features/quiz/presentation/screens/results_screen.dart';
-import 'package:clann/src/features/quiz/presentation/widgets/multiple_choice_button.dart';
-import 'package:clann/src/features/quiz/presentation/widgets/quiz_check_button.dart';
+import 'package:clann/src/features/quiz/presentation/widgets/multiple_choice_question_widget.dart';
+import 'package:clann/src/features/quiz/presentation/widgets/drag_and_drop_question_widget.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -12,61 +13,47 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  final List<Map<String, Object>> questionsAndAnswers = const [
-    {
-      'question': 'What does "Dia dhuit" mean?',
-      'answers': ['Hello', 'Goodbye', 'Please', 'Thank you'],
-      'correctAnswerIndex': 0,
-    },
-    {
-      'question': 'What is the Irish word for "Goodbye"?',
-      'answers': ['Slán', 'Le do thoil', 'Go raibh maith agat', 'Fáilte'],
-      'correctAnswerIndex': 0,
-    },
-    {
-      'question': 'How do you say "Please" in Irish?',
-      'answers': ['Le do thoil', 'Fáilte', 'Slán', 'Dia dhuit'],
-      'correctAnswerIndex': 0,
-    },
-    {
-      'question': 'What does "Go raibh maith agat" mean?',
-      'answers': ['Thank you', 'Hello', 'Goodbye', 'Please'],
-      'correctAnswerIndex': 0,
-    },
+  late final List<QuizQuestion> _questions = [
+    const MultipleChoiceQuestion(
+      prompt: 'What does "Dia dhuit" mean?',
+      answers: ['Hello', 'Goodbye', 'Please', 'Thank you'],
+      correctIndex: 0,
+    ),
+    const DragAndDropQuestion(
+      prompt: 'Construct: "Chonaic mé an car"',
+      words: ['mé', 'an', 'Chonaic', 'car'],
+      correctOrder: ['Chonaic', 'mé', 'an', 'car'],
+    ),
+    const MultipleChoiceQuestion(
+      prompt: 'What is the Irish word for "Goodbye"?',
+      answers: ['Slán', 'Le do thoil', 'Go raibh maith agat', 'Fáilte'],
+      correctIndex: 0,
+    ),
+    const MultipleChoiceQuestion(
+      prompt: 'How do you say "Please" in Irish?',
+      answers: ['Le do thoil', 'Fáilte', 'Slán', 'Dia dhuit'],
+      correctIndex: 0,
+    ),
   ];
 
   int _currentIndex = 0;
-  int? _selectedAnswerIndex;
-  bool _isChecked = false;
+  bool get _isLast => _currentIndex == _questions.length - 1;
 
-  void _nextQuestion() {
-    setState(() {
-      _currentIndex = (_currentIndex + 1) % questionsAndAnswers.length;
-      _selectedAnswerIndex = null;
-      _isChecked = false;
-    });
+  void _goNext() {
+    if (_isLast) return;
+    setState(() => _currentIndex++);
   }
 
-  void _selectAnswer(int index) {
-    setState(() {
-      _selectedAnswerIndex = index;
-      _isChecked = false;
-    });
-  }
-
-  void _checkAnswer() {
-    setState(() {
-      _isChecked = true;
-    });
+  void _finishQuiz() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ResultsScreen()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final qa = questionsAndAnswers[_currentIndex];
-    final question = qa['question'] as String;
-    final answers = (qa['answers'] as List).cast<String>();
-    final correctIndex = qa['correctAnswerIndex'] as int;
-    final bool isLastQuestion = _currentIndex == questionsAndAnswers.length - 1;
+    final question = _questions[_currentIndex];
 
     return Scaffold(
       body: Container(
@@ -96,72 +83,23 @@ class _QuizScreenState extends State<QuizScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      child: Text(
-                        question,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                    switch (question.type) {
+                      QuizQuestionType.multipleChoice =>
+                        MultipleChoiceQuestionWidget(
+                          key: ValueKey('mc_$_currentIndex'),
+                          question: question as MultipleChoiceQuestion,
+                          isLast: _isLast,
+                          onNext: _goNext,
+                          onFinish: _finishQuiz,
                         ),
+                      QuizQuestionType.dragAndDrop => DragAndDropQuestionWidget(
+                        key: ValueKey('dd_$_currentIndex'),
+                        question: question as DragAndDropQuestion,
+                        isLast: _isLast,
+                        onNext: _goNext,
+                        onFinish: _finishQuiz,
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    ...List.generate(answers.length, (index) {
-                      // Determine border color based on state
-                      Color borderColor = Colors.black;
-                      if (_isChecked && index == correctIndex) {
-                        borderColor =
-                            AppColors.primary; // correct answer turns green
-                      } else if (_selectedAnswerIndex == index) {
-                        if (_isChecked) {
-                          borderColor =
-                              AppColors.error; // wrong selected answer
-                        } else {
-                          borderColor = AppColors.info; // selected pre-check
-                        }
-                      }
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: Center(
-                          child: MultipleChoiceButton(
-                            answerText: answers[index],
-                            borderColor: borderColor,
-                            onTap: _isChecked
-                                ? null
-                                : () => _selectAnswer(index),
-                          ),
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 24),
-
-                    Center(
-                      child: QuizCheckButton(
-                        enabled: _selectedAnswerIndex != null,
-                        isChecked: _isChecked,
-                        showFinish: _isChecked && isLastQuestion,
-                        onTap: () {
-                          if (_selectedAnswerIndex == null) return;
-                          if (_isChecked) {
-                            if (isLastQuestion) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ResultsScreen(),
-                                ),
-                              );
-                            } else {
-                              _nextQuestion();
-                            }
-                          } else {
-                            _checkAnswer();
-                          }
-                        },
-                      ),
-                    ),
+                    },
                   ],
                 ),
               ),

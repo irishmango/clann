@@ -10,16 +10,9 @@ class LearnScreen extends StatelessWidget {
     return Center(
       child: OutlinedButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const DragAndDropQuizScreen(
-                prompt: 'Construct this sentence',
-                words: ['mé', 'an', 'Chonaic', 'car'],
-                correctOrder: ['Chonaic', 'mé', 'an', 'car'],
-                isLastQuestion: false,
-              ),
-            ),
-          );
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => QuizScreen()));
         },
         child: Text('Quiz'),
       ),
