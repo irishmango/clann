@@ -51,6 +51,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
               ? Text("Make a search to get started!")
               : ConjugatorScreen(),
         ),
+
         SizedBox(height: 32),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
