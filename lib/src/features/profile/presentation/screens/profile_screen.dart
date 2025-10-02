@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       pageBuilder: (_, __, ___) {
         return PopScope(
           child: Center(
-            child: _AchievementOverlayCard(
+            child: AchievementOverlayCard(
               achievement: a,
               onClose: () => Navigator.of(context, rootNavigator: true).pop(),
             ),
@@ -51,8 +51,6 @@ class _ProfileScreenState extends State<ProfileScreen>
       transitionDuration: const Duration(milliseconds: 260),
     );
   }
-
-  // Removed _closeAchievement()
 
   @override
   Widget build(BuildContext context) {
@@ -242,10 +240,12 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 }
 
-class _AchievementOverlayCard extends StatelessWidget {
+class AchievementOverlayCard extends StatelessWidget {
   final Achievement achievement;
   final VoidCallback onClose;
-  const _AchievementOverlayCard({
+
+  const AchievementOverlayCard({
+    super.key,
     required this.achievement,
     required this.onClose,
   });
@@ -257,7 +257,7 @@ class _AchievementOverlayCard extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         width: 300,
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+        padding: const EdgeInsets.fromLTRB(40, 16, 40, 28),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
@@ -265,21 +265,9 @@ class _AchievementOverlayCard extends StatelessWidget {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 110,
-              height: 110,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 2),
-                color: AppColors.primaryLight,
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                achievement.emoji,
-                style: const TextStyle(fontSize: 54),
-              ),
-            ),
+            Text(achievement.emoji, style: const TextStyle(fontSize: 54)),
             const SizedBox(height: 20),
             Text(
               achievement.title,
