@@ -31,22 +31,16 @@ class Conjugator extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: Text(
-                data.title,
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-            ),
+            Text(data.title, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 20),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       for (int i = 0; i < data.ga.length; i++) ...[
                         Text(data.ga[i]),
@@ -58,7 +52,7 @@ class Conjugator extends StatelessWidget {
                 const SizedBox(width: 32),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       for (int i = 0; i < data.en.length; i++) ...[
                         Text(data.en[i]),
