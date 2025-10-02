@@ -68,6 +68,13 @@ flutter:
   assets:
     - assets/img/avatar_temp.jpg
     - assets/img/gaeilge_101.png
+    - assets/img/bird_books.png
+    - assets/img/owl_school.png
+    - assets/img/family_friends.png
+    - assets/img/greetings.png
+    - assets/img/numbers.png
+    - assets/img/time_seasons.png
+    - assets/img/gaeltacht.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
