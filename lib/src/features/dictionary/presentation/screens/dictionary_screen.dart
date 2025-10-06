@@ -13,6 +13,7 @@ class DictionaryScreen extends StatefulWidget {
 }
 
 class _DictionaryScreenState extends State<DictionaryScreen> {
+  // Keep only search helper & irregular search logic here.
   int _selectedIndex = 0;
   String _query = '';
   final TextEditingController _controller = TextEditingController();
@@ -45,269 +46,112 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 80.0,
-            left: 18.0,
-            right: 18.0,
-            bottom: 16.0,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _selectedIndex == 0 ? "Dictionary" : "Conjugator",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 14),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: _ModeSwitch(
-                  selectedIndex: _selectedIndex,
-                  onChanged: (i) {
-                    if (i == _selectedIndex) return;
-                    setState(() {
-                      _selectedIndex = i;
-                      _selectedEntry = null;
-                      _query = '';
-                      _controller.clear();
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 14),
-              CustomSearchBar(
-                hintText: _selectedIndex == 0
-                    ? "Search in Irish or English"
-                    : "Search verbs",
-                onChanged: _onSearchChanged,
-                controller: _controller,
-              ),
-            ],
-          ),
-        ),
-        // Dictionary content gets standard horizontal padding; conjugator mode manages its own layout.
-        if (_selectedIndex == 0)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: _buildSearchResults(),
-          )
-        else
-          _buildConjugatorMode(),
-      ],
-    );
-  }
-
-  Widget _buildSearchResults() {
-    // If an entry is selected, show only its detail; hide the list.
-    if (_selectedEntry != null) {
-      return _buildEntryDetail(_selectedEntry!);
-    }
-
-    if (_query.isEmpty) {
-      return const Text(
-        "Make a search to get started!",
-        style: TextStyle(fontSize: 16),
-      );
-    }
-    final results = _filtered;
-    if (results.isEmpty) {
-      return Text(
-        "No results found for '$_query'",
-        style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
-      );
-    }
-
-    // Otherwise show the results list (limited height).
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 260),
-      child: ListView.separated(
-        padding: EdgeInsets.all(0),
-        shrinkWrap: true,
-        itemCount: results.length,
-        separatorBuilder: (_, __) => const Divider(height: 1),
-        itemBuilder: (context, index) {
-          final entry = results[index];
-          return InkWell(
-            onTap: () {
-              setState(() {
-                _selectedEntry = entry;
-                // Clear search bar & query after selection per requirement
-                _query = '';
-                _controller.clear();
-              });
-            },
-            child: ListTile(
-              dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-              title: Text(
-                entry.irish,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              subtitle: Text(entry.english),
-              trailing: entry.partOfSpeech.isNotEmpty
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.peach.withAlpha(153),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black, width: 1),
-                      ),
-                      child: Text(
-                        entry.partOfSpeech,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildEntryDetail(DictionaryEntry entry) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.peach.withAlpha(153),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black, width: 1.5),
-      ),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text(
-                entry.irish,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 80.0,
+              left: 18.0,
+              right: 18.0,
+              bottom: 16.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _selectedIndex == 0 ? "Dictionary" : "Conjugator",
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
-              ),
-              const SizedBox(width: 8),
-              if (entry.partOfSpeech.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withAlpha(178),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.black, width: 1),
-                  ),
-                  child: Text(
-                    entry.partOfSpeech,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
+                const SizedBox(height: 14),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ModeSwitch(
+                    selectedIndex: _selectedIndex,
+                    onChanged: (i) {
+                      if (i == _selectedIndex) return;
+                      setState(() {
+                        _selectedIndex = i;
+                        _selectedEntry = null;
+                        _query = '';
+                        _controller.clear();
+                      });
+                    },
                   ),
                 ),
-              const Spacer(),
-              IconButton(
-                tooltip: 'Close',
-                onPressed: () => setState(() => _selectedEntry = null),
-                icon: const Icon(Icons.close_rounded, size: 20),
-              ),
-            ],
+                const SizedBox(height: 14),
+                CustomSearchBar(
+                  hintText: _selectedIndex == 0
+                      ? "Search in Irish or English"
+                      : "Search verbs",
+                  onChanged: _onSearchChanged,
+                  controller: _controller,
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 4),
-          Text(entry.english, style: const TextStyle(fontSize: 16)),
+          // Dictionary content gets standard horizontal padding; conjugator mode manages its own layout.
+          if (_selectedIndex == 0)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: DictionaryBody(
+                query: _query,
+                results: _filtered,
+                selectedEntry: _selectedEntry,
+                onSelectEntry: (e) {
+                  setState(() {
+                    _selectedEntry = e;
+                    _query = '';
+                    _controller.clear();
+                  });
+                  FocusScope.of(context).unfocus();
+                },
+                onCloseEntry: () => setState(() => _selectedEntry = null),
+                onConjugate: (lemma) {
+                  final irregular = findIrregularVerb(lemma);
+                  if (irregular != null) {
+                    setState(() {
+                      _selectedIndex = 1;
+                      _selectedVerb = irregular;
+                      _selectedEntry = null;
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Conjugator support coming soon for regular verbs',
+                          ),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                  }
+                },
+              ),
+            )
+          else
+            ConjugatorMode(
+              selectedVerb: _selectedVerb,
+              query: _query,
+              onVerbSelected: (v) {
+                setState(() {
+                  _selectedVerb = v;
+                  _query = '';
+                  _controller.clear();
+                });
+                FocusScope.of(context).unfocus();
+              },
+              onClearVerb: () => setState(() => _selectedVerb = null),
+              searchIrregular: _searchIrregularVerbs,
+            ),
         ],
       ),
     );
   }
-
-  // ================= Conjugator Mode (Irregular Verb Search) =================
-  Widget _buildConjugatorMode() {
-    // If a verb has been selected show its conjugations
-    if (_selectedVerb != null) {
-      return _IrregularVerbConjugator(
-        verb: _selectedVerb!,
-        onClear: () {
-          setState(() {
-            _selectedVerb = null;
-          });
-        },
-      );
-    }
-
-    // Show search suggestions if user typing
-    if (_query.isNotEmpty) {
-      final results = _searchIrregularVerbs(_query);
-      if (results.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-          child: Text(
-            "No irregular verb found for '$_query'",
-            style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
-          ),
-        );
-      }
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 260),
-          child: ListView.separated(
-            padding: EdgeInsets.zero,
-            itemCount: results.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
-            itemBuilder: (context, index) {
-              final verb = results[index];
-              return InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedVerb = verb;
-                    _query = '';
-                    _controller.clear();
-                  });
-                },
-                child: ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    verb.lemma,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: Text(verb.english),
-                  trailing: verb.altLemmas.isNotEmpty
-                      ? Text(
-                          verb.altLemmas.join(', '),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        )
-                      : null,
-                ),
-              );
-            },
-          ),
-        ),
-      );
-    }
-
-    // Default placeholder when nothing selected or typed
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 18.0),
-      child: Text(
-        'Type an irregular verb (e.g. bí, abair, feic, ith...)',
-        style: TextStyle(fontSize: 16),
-      ),
-    );
-  }
+  // (Legacy private builder methods removed in refactor.)
 
   List<IrregularVerb> _searchIrregularVerbs(String q) {
     final query = q.toLowerCase();
@@ -322,17 +166,21 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
 }
 
 // ================= Irregular Verb Conjugator Widget =================
-class _IrregularVerbConjugator extends StatefulWidget {
+class IrregularVerbConjugator extends StatefulWidget {
   final IrregularVerb verb;
   final VoidCallback onClear;
-  const _IrregularVerbConjugator({required this.verb, required this.onClear});
+  const IrregularVerbConjugator({
+    super.key,
+    required this.verb,
+    required this.onClear,
+  });
 
   @override
-  State<_IrregularVerbConjugator> createState() =>
+  State<IrregularVerbConjugator> createState() =>
       _IrregularVerbConjugatorState();
 }
 
-class _IrregularVerbConjugatorState extends State<_IrregularVerbConjugator> {
+class _IrregularVerbConjugatorState extends State<IrregularVerbConjugator> {
   int _selectedTenseIndex = 0;
   late final List<IrishTense> _tensesOrder = [
     IrishTense.present,
@@ -358,30 +206,35 @@ class _IrregularVerbConjugatorState extends State<_IrregularVerbConjugator> {
             padding: const EdgeInsets.symmetric(horizontal: horizontalPad),
             child: Row(
               children: [
-                Text(
-                  widget.verb.lemma,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.peach.withOpacity(.5),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.black, width: 1),
-                  ),
-                  child: Text(
-                    widget.verb.english,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                // Combined styled verb heading: Irish - English (Expanded so close button stays flush right)
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        height: 1.1,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: widget.verb.lemma,
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        const TextSpan(
+                          text: ' - ',
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                        TextSpan(
+                          text: widget.verb.english,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Spacer(),
                 IconButton(
                   tooltip: 'Close',
                   onPressed: widget.onClear,
@@ -414,8 +267,11 @@ class _IrregularVerbConjugatorState extends State<_IrregularVerbConjugator> {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: selected ? AppColors.peach : Colors.white,
-                      border: Border.all(color: Colors.black, width: 2),
+                      color: Colors.white,
+                      border: Border.all(
+                        color: selected ? AppColors.primary : Colors.black,
+                        width: 2,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -518,11 +374,279 @@ class _IrregularVerbConjugatorState extends State<_IrregularVerbConjugator> {
   String _pastParticiple(String base) => _basePast(base);
 }
 
+// ===================== Dictionary Body Widgets =====================
+
+class DictionaryBody extends StatelessWidget {
+  final String query;
+  final List<DictionaryEntry> results;
+  final DictionaryEntry? selectedEntry;
+  final ValueChanged<DictionaryEntry> onSelectEntry;
+  final VoidCallback onCloseEntry;
+  final ValueChanged<String> onConjugate; // lemma
+
+  const DictionaryBody({
+    super.key,
+    required this.query,
+    required this.results,
+    required this.selectedEntry,
+    required this.onSelectEntry,
+    required this.onCloseEntry,
+    required this.onConjugate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (selectedEntry != null) {
+      return DictionaryEntryDetail(
+        entry: selectedEntry!,
+        onClose: onCloseEntry,
+        onConjugate: onConjugate,
+      );
+    }
+    if (query.isEmpty) {
+      return const Text(
+        'Make a search to get started!',
+        style: TextStyle(fontSize: 16),
+      );
+    }
+    if (results.isEmpty) {
+      return Text(
+        "No results found for '$query'",
+        style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+      );
+    }
+    return SearchResults(results: results, onTap: onSelectEntry);
+  }
+}
+
+class SearchResults extends StatelessWidget {
+  final List<DictionaryEntry> results;
+  final ValueChanged<DictionaryEntry> onTap;
+  const SearchResults({super.key, required this.results, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxHeight: 260),
+      child: ListView.separated(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        itemCount: results.length,
+        separatorBuilder: (_, __) => const Divider(height: 1),
+        itemBuilder: (context, index) {
+          final entry = results[index];
+          return InkWell(
+            onTap: () => onTap(entry),
+            child: ListTile(
+              dense: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+              title: Text(
+                entry.irish,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(entry.english),
+              trailing: entry.partOfSpeech.isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.black, width: 1),
+                      ),
+                      child: Text(
+                        entry.partOfSpeech,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class DictionaryEntryDetail extends StatelessWidget {
+  final DictionaryEntry entry;
+  final VoidCallback onClose;
+  final ValueChanged<String> onConjugate; // lemma
+  const DictionaryEntryDetail({
+    super.key,
+    required this.entry,
+    required this.onClose,
+    required this.onConjugate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isVerb = entry.partOfSpeech.toLowerCase() == 'verb';
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                entry.irish,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 8),
+              if (entry.partOfSpeech.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.black, width: 1),
+                  ),
+                  child: Text(
+                    entry.partOfSpeech,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              const Spacer(),
+              IconButton(
+                tooltip: 'Close',
+                onPressed: onClose,
+                icon: const Icon(Icons.close_rounded, size: 20),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(entry.english, style: const TextStyle(fontSize: 16)),
+          if (isVerb) ...[
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: Colors.black, width: 1.2),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                onPressed: () => onConjugate(entry.irish),
+                child: const Text('Conjugate'),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class ConjugatorMode extends StatelessWidget {
+  final IrregularVerb? selectedVerb;
+  final String query;
+  final ValueChanged<IrregularVerb> onVerbSelected;
+  final VoidCallback onClearVerb;
+  final List<IrregularVerb> Function(String) searchIrregular;
+
+  const ConjugatorMode({
+    super.key,
+    required this.selectedVerb,
+    required this.query,
+    required this.onVerbSelected,
+    required this.onClearVerb,
+    required this.searchIrregular,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (selectedVerb != null) {
+      return IrregularVerbConjugator(verb: selectedVerb!, onClear: onClearVerb);
+    }
+    if (query.isNotEmpty) {
+      final results = searchIrregular(query);
+      if (results.isEmpty) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18.0),
+          child: Text(
+            'No irregular verb found for that query',
+            style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+          ),
+        );
+      }
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 260),
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            itemCount: results.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final verb = results[index];
+              return InkWell(
+                onTap: () => onVerbSelected(verb),
+                child: ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    verb.lemma,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(verb.english),
+                  trailing: verb.altLemmas.isNotEmpty
+                      ? Text(
+                          verb.altLemmas.join(', '),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        )
+                      : null,
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    }
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 18.0),
+      child: Text(
+        'Type an irregular verb (e.g. bí, abair, feic, ith...)',
+        style: TextStyle(fontSize: 16),
+      ),
+    );
+  }
+}
+
 /// Mode switch widget for Dictionary / Conjugator.
-class _ModeSwitch extends StatelessWidget {
+class ModeSwitch extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onChanged;
-  const _ModeSwitch({required this.selectedIndex, required this.onChanged});
+  const ModeSwitch({required this.selectedIndex, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -537,13 +661,13 @@ class _ModeSwitch extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _ModeSwitchButton(
+            ModeSwitchButton(
               label: 'Dictionary',
               index: 0,
               selected: selectedIndex == 0,
               onTap: onChanged,
             ),
-            _ModeSwitchButton(
+            ModeSwitchButton(
               label: 'Conjugator',
               index: 1,
               selected: selectedIndex == 1,
@@ -556,12 +680,12 @@ class _ModeSwitch extends StatelessWidget {
   }
 }
 
-class _ModeSwitchButton extends StatelessWidget {
+class ModeSwitchButton extends StatelessWidget {
   final String label;
   final bool selected;
   final int index;
   final ValueChanged<int> onTap;
-  const _ModeSwitchButton({
+  const ModeSwitchButton({
     required this.label,
     required this.selected,
     required this.index,
@@ -577,17 +701,17 @@ class _ModeSwitchButton extends StatelessWidget {
         duration: const Duration(milliseconds: 160),
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: selected ? AppColors.peach : Colors.transparent,
+          color: selected ? AppColors.primary : Colors.transparent,
           borderRadius: _radiusForIndex(index),
         ),
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 14,
-            color: Colors.black,
+            color: selected ? Colors.white : Colors.black,
           ),
         ),
       ),
