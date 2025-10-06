@@ -34,26 +34,30 @@ class LessonScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 80, 16, 32),
-              child: Column(
-                spacing: 12,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Céad Míle Fáilte",
-                    style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                      color: AppColors.primary,
+            Container(
+              color: AppColors.primary,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 80, 16, 32),
+                child: Column(
+                  spacing: 12,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Céad Míle Fáilte",
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displayMedium!.copyWith(color: Colors.white),
                     ),
-                  ),
-                  Text(
-                    "Gaeilge 101",
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      fontWeight: FontWeight.w300,
-                      color: AppColors.primary,
+                    Text(
+                      "Gaeilge 101",
+                      style: Theme.of(context).textTheme.headlineSmall!
+                          .copyWith(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white,
+                          ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Row(

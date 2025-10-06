@@ -75,6 +75,7 @@ flutter:
     - assets/img/numbers.png
     - assets/img/time_seasons.png
     - assets/img/gaeltacht.png
+    - assets/img/bread_drink.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
