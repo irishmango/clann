@@ -28,7 +28,6 @@ class _RootScreenState extends State<RootScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: switch (_selectedIndex) {
-        0 => LearnScreen(),
         1 => DictionaryScreen(),
         2 => HomeScreen(),
         3 => NotesScreen(),

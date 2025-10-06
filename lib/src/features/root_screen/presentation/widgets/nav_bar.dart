@@ -27,48 +27,45 @@ class NavBar extends StatelessWidget {
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            NavBarButton(
-              parent: this,
-              selectedColor: selectedColor,
-              icon: Icons.school,
-              index: 0,
-              label: "Quiz",
-            ),
-            NavBarButton(
-              parent: this,
-              selectedColor: selectedColor,
-              icon: Icons.menu_book_rounded,
-              index: 1,
-              label: "Dictionary",
-            ),
-            NavBarButton(
-              parent: this,
-              selectedColor: selectedColor,
-              icon: Icons.home,
-              index: 2,
-              label: "Home",
-            ),
-            NavBarButton(
-              parent: this,
-              selectedColor: selectedColor,
-              icon: Icons.favorite,
-              index: 3,
-              label: "Notes",
-            ),
-            NavBarButton(
-              parent: this,
-              selectedColor: selectedColor,
-              icon: Icons.person,
-              index: 4,
-              label: "Profile",
-            ),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          // NavBarButton(
+          //   parent: this,
+          //   selectedColor: selectedColor,
+          //   icon: Icons.school,
+          //   index: 0,
+          //   label: "Quiz",
+          // ),
+          NavBarButton(
+            parent: this,
+            selectedColor: selectedColor,
+            icon: Icons.menu_book_rounded,
+            index: 1,
+            label: "Dictionary",
+          ),
+          NavBarButton(
+            parent: this,
+            selectedColor: selectedColor,
+            icon: Icons.home,
+            index: 2,
+            label: "Home",
+          ),
+          NavBarButton(
+            parent: this,
+            selectedColor: selectedColor,
+            icon: Icons.favorite,
+            index: 3,
+            label: "Notes",
+          ),
+          NavBarButton(
+            parent: this,
+            selectedColor: selectedColor,
+            icon: Icons.person,
+            index: 4,
+            label: "Profile",
+          ),
+        ],
       ),
     );
   }
