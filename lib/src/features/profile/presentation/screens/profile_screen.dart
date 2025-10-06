@@ -1,17 +1,19 @@
 import 'package:clann/src/features/profile/presentation/widgets/achievement_grid.dart';
 import 'package:clann/src/features/profile/presentation/widgets/streak_card.dart';
 import 'package:clann/src/features/settings/presentation/screens/settings_screen.dart';
+import 'package:clann/src/features/profile/application/streak_provider.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen>
+class _ProfileScreenState extends ConsumerState<ProfileScreen>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
 
@@ -54,6 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
+    final streakState = ref.watch(streakProvider);
     return Stack(
       children: [
         SingleChildScrollView(
@@ -224,10 +227,30 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                     SizedBox(height: 40),
                     switch (_selectedIndex) {
-                      0 => StreakCard(),
+                      0 => Column(
+                        children: [
+                          StreakCard(
+                            streakDays: streakState.days,
+                            showCount: true,
+                            highlightToday: true,
+                          ),
+                          const SizedBox(height: 16),
+                          // Example button to mark today complete (temporary demo; remove or style later)
+                          ElevatedButton(
+                            onPressed: () => ref
+                                .read(streakProvider.notifier)
+                                .markTodayComplete(),
+                            child: const Text('Mark today complete'),
+                          ),
+                        ],
+                      ),
                       1 => AchievementGrid(onAchievementTap: _openAchievement),
-                      2 => SettingsScreen(),
-                      _ => StreakCard(),
+                      2 => const SettingsScreen(),
+                      _ => StreakCard(
+                        streakDays: streakState.days,
+                        showCount: true,
+                        highlightToday: true,
+                      ),
                     },
                   ],
                 ),
