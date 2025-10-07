@@ -1,6 +1,7 @@
 import 'package:clann/src/shared/custom_search_bar.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
+import 'grammar_topic_screen.dart';
 
 class GrammarOverviewScreen extends StatelessWidget {
   GrammarOverviewScreen({super.key});
@@ -67,22 +68,31 @@ class GrammarOverviewScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       for (final topic in section.values.first) ...[
-                        Container(
-                          height: 80,
-                          margin: const EdgeInsets.only(bottom: 12),
-                          decoration: BoxDecoration(
-                            color: AppColors.navy,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.black, width: 2),
-                          ),
-                          alignment: Alignment.bottomLeft,
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            topic,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Colors.white,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => GrammarTopicScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 80,
+                            margin: const EdgeInsets.only(bottom: 12),
+                            decoration: BoxDecoration(
+                              color: AppColors.navy,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.black, width: 2),
+                            ),
+                            alignment: Alignment.bottomLeft,
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              topic,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),

@@ -1,5 +1,4 @@
-import 'package:clann/src/features/quiz/presentation/screens/quiz_screen.dart';
-import 'package:clann/src/features/root_screen/presentation/screens/root_screen.dart';
+import 'package:clann/src/features/startup/presentation/screens/startup_screen.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Clann',
       theme: buildAppTheme(),
-      home: RootScreen(),
+      home: const StartupScreen(),
     );
   }
 }

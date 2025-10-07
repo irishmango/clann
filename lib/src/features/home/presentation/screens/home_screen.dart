@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:clann/src/features/bundles/presentation/screens/bundles_overview_screen.dart';
 import 'package:clann/src/features/grammar/presentation/screens/grammar_overview_screen.dart';
+import 'package:clann/src/features/grammar/presentation/screens/grammar_topic_screen.dart';
 import 'package:clann/src/features/vocab/presentation/screens/vocab_overview_screen.dart';
 import 'package:clann/src/shared/custom_search_bar.dart';
 import 'package:clann/src/shared/long_tile.dart';
@@ -115,9 +116,19 @@ class HomeScreen extends StatelessWidget {
                     padding: EdgeInsets.only(left: 16),
                     itemCount: grammarList.length,
                     itemBuilder: (context, index) {
-                      return SmallTile(
-                        title: grammarList[index],
-                        imgPath: grammarImages[index],
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GrammarTopicScreen(),
+                            ),
+                          );
+                        },
+                        child: SmallTile(
+                          title: grammarList[index],
+                          imgPath: grammarImages[index],
+                        ),
                       );
                     },
                     separatorBuilder: (context, index) => SizedBox(width: 12),
