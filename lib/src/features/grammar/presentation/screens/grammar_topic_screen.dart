@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clann/theme.dart';
+import 'package:clann/src/shared/mode_switch.dart';
 
 class GrammarTopicScreen extends StatefulWidget {
   const GrammarTopicScreen({super.key});
@@ -20,41 +21,12 @@ class _GrammarTopicScreenState extends State<GrammarTopicScreen> {
           children: [
             _HeaderBanner(),
             const SizedBox(height: 12),
-            // Centered switch row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Reading Material',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: !_isPractice ? Colors.black : Colors.black54,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Transform.scale(
-                  scale: 1.05,
-                  child: Switch(
-                    value: _isPractice,
-                    activeColor: Colors.white,
-                    activeTrackColor: AppColors.primary,
-                    inactiveThumbColor: Colors.white,
-                    inactiveTrackColor: Colors.black12,
-                    trackOutlineColor: MaterialStateProperty.all(Colors.black),
-                    onChanged: (val) => setState(() => _isPractice = val),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  'Practice',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: _isPractice ? Colors.black : Colors.black54,
-                  ),
-                ),
-              ],
+            // Centered ModeSwitch row
+            ModeSwitch(
+              selectedIndex: _isPractice ? 1 : 0,
+              onChanged: (i) => setState(() => _isPractice = i == 1),
+              leftLabel: 'Reading Material',
+              rightLabel: 'Practice',
             ),
             const SizedBox(height: 16),
             Expanded(

@@ -192,7 +192,7 @@ class _AnswerArea extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
             decoration: BoxDecoration(
               color: active
-                  ? AppColors.primary.withOpacity(0.5)
+                  ? AppColors.primary.withAlpha(200)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(4),
             ),

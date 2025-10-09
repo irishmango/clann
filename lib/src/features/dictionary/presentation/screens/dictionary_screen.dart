@@ -1,9 +1,11 @@
 import 'package:clann/src/shared/custom_search_bar.dart';
+import 'package:clann/src/shared/mode_switch.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:clann/src/features/dictionary/data/dummy_dictionary.dart';
 import 'package:clann/src/features/dictionary/data/irregular_verb_database.dart';
 import 'package:clann/src/features/dictionary/presentation/widgets/conjugator.dart';
+import 'package:clann/src/features/dictionary/presentation/widgets/dictionary_dashboard.dart';
 
 class DictionaryScreen extends StatefulWidget {
   const DictionaryScreen({super.key});
@@ -51,51 +53,40 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 80.0,
-              left: 18.0,
-              right: 18.0,
-              bottom: 16.0,
+          DictionaryDashboard(
+            title: _selectedIndex == 0 ? 'Dictionary' : 'Conjugator',
+            middle: Align(
+              alignment: Alignment.centerLeft,
+              child: ModeSwitch(
+                leftLabel: "Dictionary",
+                rightLabel: "Conjugator",
+                selectedIndex: _selectedIndex,
+                onChanged: (i) {
+                  if (i == _selectedIndex) return;
+                  setState(() {
+                    _selectedIndex = i;
+                    _selectedEntry = null;
+                    _query = '';
+                    _controller.clear();
+                  });
+                },
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _selectedIndex == 0 ? "Dictionary" : "Conjugator",
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-                const SizedBox(height: 14),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ModeSwitch(
-                    selectedIndex: _selectedIndex,
-                    onChanged: (i) {
-                      if (i == _selectedIndex) return;
-                      setState(() {
-                        _selectedIndex = i;
-                        _selectedEntry = null;
-                        _query = '';
-                        _controller.clear();
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(height: 14),
-                CustomSearchBar(
-                  hintText: _selectedIndex == 0
-                      ? "Search in Irish or English"
-                      : "Search verbs",
-                  onChanged: _onSearchChanged,
-                  controller: _controller,
-                ),
-              ],
+            searchBar: CustomSearchBar(
+              hintText: _selectedIndex == 0
+                  ? 'Search in Irish or English'
+                  : 'Search verbs',
+              onChanged: _onSearchChanged,
+              controller: _controller,
             ),
           ),
           // Dictionary content gets standard horizontal padding; conjugator mode manages its own layout.
           if (_selectedIndex == 0)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 12,
+              ),
               child: DictionaryBody(
                 query: _query,
                 results: _filtered,
@@ -404,15 +395,21 @@ class DictionaryBody extends StatelessWidget {
       );
     }
     if (query.isEmpty) {
-      return const Text(
-        'Make a search to get started!',
-        style: TextStyle(fontSize: 16),
+      return const Padding(
+        padding: EdgeInsets.only(top: 12.0),
+        child: Text(
+          'Make a search to get started!',
+          style: TextStyle(fontSize: 16),
+        ),
       );
     }
     if (results.isEmpty) {
-      return Text(
-        "No results found for '$query'",
-        style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+      return Padding(
+        padding: EdgeInsets.only(top: 12.0),
+        child: Text(
+          "No results found for '$query'",
+          style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+        ),
       );
     }
     return SearchResults(results: results, onTap: onSelectEntry);
@@ -589,7 +586,7 @@ class ConjugatorMode extends StatelessWidget {
       final results = searchIrregular(query);
       if (results.isEmpty) {
         return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18.0),
+          padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 12),
           child: Text(
             'No irregular verb found for that query',
             style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
@@ -603,7 +600,7 @@ class ConjugatorMode extends StatelessWidget {
           child: ListView.separated(
             padding: EdgeInsets.zero,
             itemCount: results.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, __) => const Divider(height: 12),
             itemBuilder: (context, index) {
               final verb = results[index];
               return InkWell(
@@ -633,101 +630,11 @@ class ConjugatorMode extends StatelessWidget {
       );
     }
     return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 18.0),
+      padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 24),
       child: Text(
         'Type an irregular verb (e.g. bí, abair, feic, ith...)',
         style: TextStyle(fontSize: 16),
       ),
-    );
-  }
-}
-
-/// Mode switch widget for Dictionary / Conjugator.
-class ModeSwitch extends StatelessWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onChanged;
-  const ModeSwitch({required this.selectedIndex, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black, width: 2),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(2),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ModeSwitchButton(
-              label: 'Dictionary',
-              index: 0,
-              selected: selectedIndex == 0,
-              onTap: onChanged,
-            ),
-            ModeSwitchButton(
-              label: 'Conjugator',
-              index: 1,
-              selected: selectedIndex == 1,
-              onTap: onChanged,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ModeSwitchButton extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final int index;
-  final ValueChanged<int> onTap;
-  const ModeSwitchButton({
-    required this.label,
-    required this.selected,
-    required this.index,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: _radiusForIndex(index),
-      onTap: () => onTap(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOut,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.transparent,
-          borderRadius: _radiusForIndex(index),
-        ),
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-            color: selected ? Colors.white : Colors.black,
-          ),
-        ),
-      ),
-    );
-  }
-
-  BorderRadius _radiusForIndex(int i) {
-    if (i == 0) {
-      return const BorderRadius.only(
-        topLeft: Radius.circular(12),
-        bottomLeft: Radius.circular(12),
-      );
-    }
-    return const BorderRadius.only(
-      topRight: Radius.circular(12),
-      bottomRight: Radius.circular(12),
     );
   }
 }

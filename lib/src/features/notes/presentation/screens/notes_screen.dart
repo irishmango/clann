@@ -1,5 +1,6 @@
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:clann/src/features/notes/presentation/widgets/notes_dashboard.dart';
 
 class NotesScreen extends StatelessWidget {
   NotesScreen({super.key});
@@ -10,26 +11,21 @@ class NotesScreen extends StatelessWidget {
     {"title": "Prepositions", "color": Colors.blue},
     {"title": "Adjectives", "color": AppColors.lavender},
   ];
-  final phraseBooks = ["Gaeltact", "Family & Friends"];
+  final phraseBooks = ["Gaeltacht", "Family & Friends"];
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 80.0,
-              left: 18.0,
-              right: 18.0,
-              bottom: 32.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Notes", style: Theme.of(context).textTheme.displayMedium),
-                const SizedBox(height: 36),
-                Column(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const NotesDashboard(),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Column(
                   spacing: 12,
                   children: [
                     Row(
@@ -70,8 +66,11 @@ class NotesScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
-                Column(
+              ),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Column(
                   spacing: 12,
                   children: [
                     Row(
@@ -113,8 +112,8 @@ class NotesScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

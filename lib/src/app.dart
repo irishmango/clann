@@ -9,6 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Clann',
+      debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
       home: const StartupScreen(),
     );

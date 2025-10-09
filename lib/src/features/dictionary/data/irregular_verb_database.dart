@@ -1,15 +1,15 @@
-/// Irish Irregular Verb Database (initial draft)
-/// --------------------------------------------------------------
-/// This file defines a lightweight in-memory dataset of the core
-/// Irish irregular verbs and their main synthetic/person forms
-/// across common simple tenses. It mirrors the 6-line layout
-/// already used in the temporary `ConjugationData` structure:
-///   0: 1st person singular (mé)
-///   1: 2nd person singular (tú)
-///   2: 3rd person singular (sé/sí)
-///   3: 1st person plural synthetic form where it exists (muid / -mid)
-///   4: 2nd person plural (sibh)
-///   5: 3rd person plural (siad)
+// Irish Irregular Verb Database (initial draft)
+// --------------------------------------------------------------
+// This file defines a lightweight in-memory dataset of the core
+// Irish irregular verbs and their main synthetic/person forms
+// across common simple tenses. It mirrors the 6-line layout
+// already used in the temporary `ConjugationData` structure:
+//   0: 1st person singular (mé)
+//   1: 2nd person singular (tú)
+//   2: 3rd person singular (sé/sí)
+//   3: 1st person plural synthetic form where it exists (muid / -mid)
+//   4: 2nd person plural (sibh)
+//   5: 3rd person plural (siad)
 
 enum IrishTense {
   present,

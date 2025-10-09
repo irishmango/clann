@@ -52,7 +52,7 @@ class StreakCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: AppColors.peach,
+        border: Border.all(color: AppColors.secondary, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,27 +137,25 @@ class _DayCell extends StatelessWidget {
         const SizedBox(height: 8),
 
         SizedBox(
-          height: 24,
+          height: 42,
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             transitionBuilder: (child, anim) =>
                 ScaleTransition(scale: anim, child: child),
             child: completed
-                ? const Text(
-                    '🔥',
-                    key: ValueKey('fire'),
-                    style: TextStyle(fontSize: 20),
+                ? Image.asset(
+                    'assets/icons/streak_fire_active.png',
+                    key: const ValueKey('fire-active'),
+                    width: 42,
+                    height: 42,
+                    fit: BoxFit.contain,
                   )
-                : Center(
-                    key: const ValueKey('placeholder'),
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(64),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
+                : Image.asset(
+                    'assets/icons/streak_fire_inactive.png',
+                    key: const ValueKey('fire-inactive'),
+                    width: 42,
+                    height: 42,
+                    fit: BoxFit.contain,
                   ),
           ),
         ),

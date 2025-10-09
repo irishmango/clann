@@ -3,10 +3,10 @@ import 'package:clann/src/features/bundles/presentation/screens/bundles_overview
 import 'package:clann/src/features/grammar/presentation/screens/grammar_overview_screen.dart';
 import 'package:clann/src/features/grammar/presentation/screens/grammar_topic_screen.dart';
 import 'package:clann/src/features/vocab/presentation/screens/vocab_overview_screen.dart';
-import 'package:clann/src/shared/custom_search_bar.dart';
 import 'package:clann/src/shared/long_tile.dart';
 import 'package:clann/src/shared/small_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:clann/src/features/home/presentation/widgets/dashboard_card.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -41,232 +41,204 @@ class HomeScreen extends StatelessWidget {
     final grammarImages = [for (var _ in grammarList) _randomImg(rand)];
     final vocabImages = [for (var _ in vocabList) _randomImg(rand)];
     return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.only(top: 60),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage('assets/img/avatar_temp.jpg'),
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Hi, Ian!',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Inter',
-                      color: Colors.black,
+      child: Column(
+        children: [
+          DashboardCard(),
+          const SizedBox(height: 24),
+          Column(
+            spacing: 12,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Grammar",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: CustomSearchBar(),
-            ),
-            SizedBox(height: 16),
-            Column(
-              spacing: 12,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Grammar",
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GrammarOverviewScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "See All",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Inter',
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GrammarOverviewScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "See All",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 100,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 16),
+                  itemCount: grammarList.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GrammarTopicScreen(),
                           ),
+                        );
+                      },
+                      child: SmallTile(
+                        title: grammarList[index],
+                        imgPath: grammarImages[index],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 12),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12),
+          Column(
+            spacing: 12,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Vocabulary",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VocabOverviewScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "See All",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 100,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 16),
+                  itemCount: vocabList.length,
+                  itemBuilder: (context, index) {
+                    return SmallTile(
+                      title: vocabList[index],
+                      imgPath: vocabImages[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 12),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              spacing: 12,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Bundles",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BundlesOverviewScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "See All",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: 100,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.only(left: 16),
-                    itemCount: grammarList.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GrammarTopicScreen(),
-                            ),
-                          );
-                        },
-                        child: SmallTile(
-                          title: grammarList[index],
-                          imgPath: grammarImages[index],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) => SizedBox(width: 12),
+                  height: 450,
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    children: [
+                      LongTile(
+                        imgPath: "assets/img/gaeilge_101.png",
+                        title: "Gaeilge 101",
+                        subtitle: "Start your Irish journey",
+                      ),
+                      const SizedBox(height: 12),
+                      LongTile(
+                        imgPath: "assets/img/owl_school.png",
+                        title: "Junior Cert Prep",
+                        subtitle: "Prep for 2026 exams",
+                      ),
+                      const SizedBox(height: 12),
+                      LongTile(
+                        imgPath: "assets/img/bird_books.png",
+                        title: "Leaving Cert Prep",
+                        subtitle: "Prep for 2026 exams",
+                      ),
+                      const SizedBox(height: 12),
+                      LongTile(
+                        imgPath: "assets/img/gaeltacht.png",
+                        title: "Gaeltacht Prep",
+                        subtitle: "Survival Guide",
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 12),
-            Column(
-              spacing: 12,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Vocabulary",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => VocabOverviewScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "See All",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 100,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.only(left: 16),
-                    itemCount: vocabList.length,
-                    itemBuilder: (context, index) {
-                      return SmallTile(
-                        title: vocabList[index],
-                        imgPath: vocabImages[index],
-                      );
-                    },
-                    separatorBuilder: (context, index) => SizedBox(width: 12),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                spacing: 12,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Bundles",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BundlesOverviewScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "See All",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 450,
-                    child: ListView(
-                      scrollDirection: Axis.vertical,
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      children: [
-                        LongTile(
-                          imgPath: "assets/img/gaeilge_101.png",
-                          title: "Gaeilge 101",
-                          subtitle: "Start your Irish journey",
-                        ),
-                        const SizedBox(height: 12),
-                        LongTile(
-                          imgPath: "assets/img/owl_school.png",
-                          title: "Junior Cert Prep",
-                          subtitle: "Prep for 2026 exams",
-                        ),
-                        const SizedBox(height: 12),
-                        LongTile(
-                          imgPath: "assets/img/bird_books.png",
-                          title: "Leaving Cert Prep",
-                          subtitle: "Prep for 2026 exams",
-                        ),
-                        const SizedBox(height: 12),
-                        LongTile(
-                          imgPath: "assets/img/gaeltacht.png",
-                          title: "Gaeltacht Prep",
-                          subtitle: "Survival Guide",
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 26),
-          ],
-        ),
+          ),
+          SizedBox(height: 26),
+        ],
       ),
     );
   }

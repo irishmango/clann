@@ -1,6 +1,5 @@
 import 'package:clann/src/features/quiz/presentation/screens/quiz_screen.dart';
 import 'package:clann/src/features/quiz/presentation/widgets/results_button.dart';
-import 'package:clann/src/shared/finish_button.dart';
 import 'package:clann/theme.dart';
 import 'package:flutter/material.dart';
 
